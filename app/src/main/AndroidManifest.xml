@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://android.com"
+    package="p2p.messenger.hardcore">
+
+    <!-- 1. ИНТЕРНЕТ И СЕТЬ (Глобальный P2P, WebRTC, DHT, Vmess Прокси) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!-- 2. СИСТЕМНЫЙ ИММУНИТЕТ И БЕССМЕРТИЕ (Круглосуточная работа, обход контроля Doze Mode) -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
+
+    <!-- 3. ДЕЦЕНТРАЛИЗОВАННАЯ MESH-СВЯЗЬ И РАДИО (Google Nearby Connections API) -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" />
+    <!-- Обязательно для легального сканирования эфира Bluetooth/Wi-Fi Direct системами Android -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- 4. АППАРАТНЫЙ ХОСТ ДЛЯ ВНЕШНИХ РАДИОПЛАТ LORA (Связь на километры без интернета) -->
+    <uses-feature android:name="android.hardware.usb.host" />
+    <uses-permission android:name="android.permission.USB_PERMISSION" />
+
+    <!-- 5. СБОРИЩЕ МЕДИА РАЗРЕШЕНИЙ (Запись голосовых, видеозвонки, отправка любого аудио и файлов) -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Флаг persistent гарантирует, что ядро ОС Android не убьет приложение при нехватке памяти -->
+    <application
+        android:name=".P2PApplication"
+        android:persistent="true"
+        android:allowBackup="false"
+        android:label="Hardcore P2P"
+        android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
+
+        <!-- Бессмертный фоновый сервис, маскирующийся под системный звонок и подключенное устройство -->
+        <service
+            android:name=".services.P2PConnectionService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice|phoneCall" />
+
+        <!-- Перехватчик загрузки процессора смартфона с максимальным приоритетом 999 -->
+        <receiver
+            android:name=".receivers.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="999">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>
+
