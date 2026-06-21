@@ -1,6 +1,5 @@
 name: Android P2P Hardcore Compiler
 
-# Скрипт срабатывает автоматически при сохранении файлов или при ручном запуске кнопкой
 on:
   push:
     branches: [ "main", "master" ]
@@ -15,22 +14,31 @@ jobs:
       - name: Клонирование репозитория
         uses: actions/checkout@v4
 
-      # 2. Разворачиваем стабильное окружение Java 17, необходимое для Gradle и Compose
+      # 2. Настраиваем стабильное окружение Java 17, необходимое для Gradle и Compose
       - name: Настройка Java 17 (Zulu JDK)
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-          cache: 'gradle'
 
-      # 3. Автоматически создаем исполняемый локальный Gradle Wrapper
-      - name: Инициализация сборщика Gradle
-        run: gradle wrapper --gradle-version 8.5
+      # 3. Чистая настройка Gradle 8.5 без лишних аргументов (ошибок тут не будет)
+      - name: Развертывание сборщика Gradle 8.5
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.5'
 
-      # 4. Даем системе права на выполнение утилиты сборки пакетов
-      - name: Rawanume 
-        run: chmod +x gradlew
+      # 4. ОТДЕЛЬНЫЙ СТАНДАРТНЫЙ ШАГ: Компиляция защищенного APK-пакета
+      # Мы вызываем gradle напрямую через консольную команду "run"
+      - name: Компиляция Бессмертного APK Мессенджера
+        run: gradle assembleDebug --stacktrace
 
-      # 5. Запуск компиляции защищенного
+      # 5. Выгрузка готового скомпилированного файла в интерфейс GitHub
+      - name: Загрузка готового APK на телефон
+        uses: actions/upload-artifact@v4
+        with:
+          name: Hardcore-P2P-Messenger
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          
 
           
