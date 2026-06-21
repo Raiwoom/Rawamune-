@@ -10,35 +10,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Клонируем созданную вами структуру папок и кодов мессенджера
-      - name: Клонирование репозитория
+      # 1. Клонирование вашей структуры папок мессенджера
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Настраиваем стабильное окружение Java 17, необходимое для Gradle и Compose
-      - name: Настройка Java 17 (Zulu JDK)
+      # 2. Развертывание стабильного JDK 17 (Zulu)
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
 
-      # 3. Чистая настройка Gradle 8.5 без лишних аргументов (ошибок тут не будет)
-      - name: Развертывание сборщика Gradle 8.5
-        uses: gradle/actions/setup-gradle@v4
+      # 3. Настройка Gradle через проверенную стабильную третью версию экшена
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.5'
 
-      # 4. ОТДЕЛЬНЫЙ СТАНДАРТНЫЙ ШАГ: Компиляция защищенного APK-пакета
-      # Мы вызываем gradle напрямую через консольную команду "run"
-      - name: Компиляция Бессмертного APK Мессенджера
+      # 4. Сборка APK с флагом вывода детального лога ошибок, если в кодовой базе что-то пойдет не так
+      - name: Build with Gradle
         run: gradle assembleDebug --stacktrace
 
-      # 5. Выгрузка готового скомпилированного файла в интерфейс GitHub
-      - name: Загрузка готового APK на телефон
+      # 5. Выгрузка готового APK в артефакты
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Hardcore-P2P-Messenger
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+          
           
 
           
