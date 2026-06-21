@@ -28,18 +28,9 @@ jobs:
         run: gradle wrapper --gradle-version 8.5
 
       # 4. Даем системе права на выполнение утилиты сборки пакетов
-      - name: Разрешение прав доступа для gradlew
+      - name: Rawanume 
         run: chmod +x gradlew
 
-      # 5. Запуск компиляции защищенного, обходящего блокировки APK-пакета
-      - name: Компиляция Бессмертного APK Мессенджера
-        run: ./gradlew assembleDebug --stacktrace
+      # 5. Запуск компиляции защищенного
 
-      # 6. Выгрузка готового скомпилированного файла в интерфейс GitHub
-      - name: Загрузка готового APK на телефон
-        uses: actions/upload-artifact@v4
-        with:
-          name: Rawanume
-          path: app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
           
