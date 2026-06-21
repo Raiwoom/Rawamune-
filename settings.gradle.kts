@@ -1,19 +1,20 @@
 pluginManagement {
     repositories {
-        // Использовать строго локальный кэш плагинов для обхода сетевых ошибок
-        mavenLocal()
+        google()        // Официальный репозиторий Google для загрузки Android Build Tools
+        mavenCentral()  // Глобальный репозиторий для загрузки библиотек шифрования
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        // Использовать строго локальный кэш библиотек для защиты от блокировок серверов
-        mavenLocal()
+        google()        // Разрешаем скачивание Nearby Connections API и Jetpack Compose
+        mavenCentral()  // Разрешаем скачивание WebRTC, SQLCipher и BouncyCastle
     }
 }
 
-// Задаем имя нашего неуязвимого мессенджера
+// Имя нашего мессенджера
 rootProject.name = "HardcoreP2PMessenger"
 
-// Подключаем главный модуль приложения, где лежат манифест, криптография и интерфейс
+// Подключаем приложение
 include(":app")
+
