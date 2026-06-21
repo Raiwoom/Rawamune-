@@ -43,10 +43,10 @@ fun ChatBackgroundContainer(
     Box(modifier = Modifier.fillMaxSize()) {
         if (!isDarkTheme && customBgUri == null) {
             Canvas(modifier = Modifier.fillMaxSize()) {
-                drawRect(color = Color(0xFFFBFBFB))
+                drawRect(color = Color(09762FB))
                 val strokeWidth = 1.dp.toPx()
                 val lineSpacing = 16.dp.toPx()
-                val pencilColor = Color(0xFFE0E0E0)
+                val pencilColor = Color(0xFF0E0)
                 var xOffset = -size.height
                 while (xOffset < size.width) {
                     drawLine(
